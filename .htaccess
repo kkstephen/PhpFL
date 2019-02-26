@@ -1,0 +1,18 @@
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# 将“ea-php56” 资源包设置为默认“PHP” 编程语言。
+<IfModule mime_module>
+  AddType application/x-httpd-ea-php56 .php .php5 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit
+
+# BEGIN 
+ 
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+ 
+# END 
