@@ -14,24 +14,24 @@ class View
         $this->_action = strtolower($action);
     }
  
-    // 分配变量
+    // save variable
     public function assign($name, $value)
     {
         $this->_data[$name] = $value;
     }
  
-    // 渲染显示
+    // output HMTL
     public function render()
     {      
+		//fetch object variable
 		extract($this->_data, EXTR_SKIP);
 		
         $layout = APP_PATH . 'app/views/' . $this->_controller . '/' . $this->_action . '.php';
       
-        //判断视图文件是否存在
         if (file_exists($layout)) {
             include $layout;
         } else {
-            echo "无法找到视图文件:".$this->_action;
+            echo "Not found view template:".$this->_action;
         }         
     }
 }

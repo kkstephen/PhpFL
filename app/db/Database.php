@@ -19,7 +19,7 @@ class Database {
      */
     public function open() {
 		 if ($this->pdo == null) {
-			$this->pdo = new PDO($this->conn["host"], $this->conn["username"], $this->conn["password"]);
+			$this->pdo = new PDO($this->conn["host"].'dbname='.$this->conn["dbname"], $this->conn["username"], $this->conn["password"]);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 	}

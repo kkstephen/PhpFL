@@ -38,10 +38,8 @@ class PdoUnit extends UnitORM {
 	public $user;
  
 	public function __construct() 
-	{		
-		$connStr = array("host" => "mysql:host=localhost;dbname=CPE;charset=utf8", "username" => "PPM_CPE", "password" => "PPM_pass");
-		
-		$this->db = new Database($connStr);		
+	{			 
+		$this->db = new Database($config['db']);		
         $this->user = new MyRepository($this->db);	 
     }
 }

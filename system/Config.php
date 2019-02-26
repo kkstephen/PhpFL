@@ -1,12 +1,12 @@
 <?php
 
-// 数据库配置
-$config['db']['host'] = 'localhost';
-$config['db']['username'] = 'root';
-$config['db']['password'] = '123456';
-$config['db']['dbname'] = 'project';
+// database
+$config['db']['host'] = 'mysql:host=localhost;charset=utf8;';
+$config['db']['username'] = 'PPM_CPE';
+$config['db']['password'] = 'PPM_pass';
+$config['db']['dbname'] = 'CPE';
 
-// 默认控制器和操作名
+// default controller
 $config['default'] = 'Home';
 
  

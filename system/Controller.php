@@ -1,6 +1,6 @@
 <?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 /**
- * 控制器基类
+ * Controller
  */
  
 class Controller
@@ -11,19 +11,12 @@ class Controller
     protected $view;
 	protected $input;
 	protected $db;
-	
-    // 构造函数，初始化属性，并实例化对应模型
+	 
     public function __construct()
     { 
 		$this->input = new Parser(); 
     }
-
-    // 分配变量
-    public function ViewData($name, $value)
-    { 
-        $this->view->assign($name, $value);
-    }
-	
+    
 	public function init($controller, $action) 
 	{
 		$this->_name = $controller;
@@ -33,9 +26,15 @@ class Controller
 		{
 			$this->view = new View($this->_name, $this->_action);		
 		}
-	}		
+	}
 
-    // 渲染视图
+	// set view data
+    public function ViewData($name, $value)
+    { 
+        $this->view->assign($name, $value);
+    }		
+
+    // render HTML
     public function Render()
     {  
         $this->view->render();

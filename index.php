@@ -1,15 +1,15 @@
 <?php
-// 应用目录为当前目录
+// App dir
 define('APP_PATH', __DIR__ . '/');
 
-// 开启调试模式
+// debug mode
 define('APP_DEBUG', true);
 
-// 加载框架文件
+// load core file
 require(APP_PATH . 'system/Pflmvc.php');
 
-// 加载配置文件
+// load config
 require(APP_PATH . 'system/Config.php');
 
-// 实例化框架类
+// create mvc instance
 (new Pflmvc($config))->run();
