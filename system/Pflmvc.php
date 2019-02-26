@@ -1,9 +1,11 @@
 <?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
+
 // root dir
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
 
 /**
- * MVC Core
+ * PHP MVC Core
+ * written by Stephen Yeung. (2019-2)
  */
 class Pflmvc
 { 
