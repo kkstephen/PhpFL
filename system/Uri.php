@@ -35,12 +35,15 @@ class Uri {
 	}
 	
 	function set_uri()
-	{
-		$this->uri_string = $_SERVER['REQUEST_URI'];
+	{   
+		$url = $_SERVER['REQUEST_URI'];		
+		$pos = strpos($url, '?');
 		
+        $this->uri_string = $pos === false ? $url : substr($url, 0, $position);
+	
 		$this->segments = explode('/', $this->uri_string);
 		
-		array_shift($this->segments);
+		array_shift($this->segments);		
 	}
 	
 	// get current language
