@@ -1,16 +1,19 @@
 <?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
-// root dir
-defined('CORE_PATH') or define('CORE_PATH', __DIR__);
-
 /**
  * PHP MVC Core
  * written by Stephen Yeung. (2019-2)
  */
+ 
+defined('CORE_PATH') or define('CORE_PATH', __DIR__);
+
+const PL_VERSION = '1.0';
+
 class Pflmvc
 { 
     protected $_config = [];
-
+	private $_uri; 
+	
     public function __construct($config)
     {
         $this->_config = $config;
@@ -20,40 +23,31 @@ class Pflmvc
     { 
         $this->removeMagicQuotes();
         $this->unregisterGlobals();
-		$this->loadClass();
- 
+		$this->loadClass(); 
         $this->setRoute();
     }
 
     // Route
     public function setRoute()
     {
-        $controllerName = $this->_config['default'];
         $actionName = "index";
         $param = array();
-
-        $url = $_SERVER['REQUEST_URI'];
-        // fetch request url 
-        $position = strpos($url, '?');
-        $url = $position === false ? $url : substr($url, 0, $position);
-        // del “/”
-        $url = trim($url, '/');
- 		
-        if ($url) {
-            
-            $urlArray = explode('/', $url);
-            // remove empty str
-            $urlArray = array_filter($urlArray);
-            
-            // get controller name
-            $controllerName = ucfirst(array_shift($urlArray));
-            
-            // get action name
-            $actionName = $urlArray ? array_shift($urlArray) : $actionName;
-            
-            // get action id  
-            $param = $urlArray ? array_shift($urlArray) : "";
-        }
+		
+		// get request uri string 
+		$this->_uri->set_uri();
+		
+		$segs = $this->_uri->segments;
+		
+		$i = $this->_uri->has_language() ? 0 : 1;
+		     
+		// get controller name
+		$controllerName = isset($segs[$i]) ? $segs[$i++] : $this->_config['default'];
+		
+		// get action name
+		$actionName = isset($segs[$i]) ? $segs[$i++] : "index";
+		
+		// get action id  
+		$param = isset($segs[$i]) ? $segs[$i] : "";       
 
         // class file
         $controller = APP_PATH.'app/controllers/'.$controllerName.'.php';
@@ -128,21 +122,31 @@ class Pflmvc
     // load class
     public function loadClass()
     {
-        $files = $this->classMap();
+        $this->coreClass();
 
-		foreach ($files as $file)
-		{
-		    include $file;
-		} 
+		$this->_uri = new Uri($this->_config);
+		
     }
 
     // class mapping
-    protected function classMap()
+    protected function coreClass()
     {
-        return [
+        $c = [
             1 => CORE_PATH . '/Controller.php',
 			2 => CORE_PATH . '/View.php',
-			3 => APP_PATH.'/app/utils/Parser.php'
+			3 => CORE_PATH . '/Uri.php'					
         ];
+		
+		foreach ($c as $f)
+		{
+		    require_once $f;
+		}
+		
+		$tools = $this->_config['utils'];
+		
+		foreach ($tools as $t)
+		{
+		    require_once $t;
+		}
     }
 }

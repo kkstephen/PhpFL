@@ -21,17 +21,36 @@ class View
     }
  
     // output HMTL
-    public function render()
-    {      
+    public function render($file_view)
+    {
+		$tmpl = APP_PATH . 'app/views/';
+		
+		if ($file_view == "") {
+			$tmpl .= $this->_controller.'/'.$this->_action . '.php';
+		}
+		else {
+			$tmpl .= 'layout/'.$file_view . '.php';
+		}
+      
+        if (file_exists($tmpl)) {
+			echo $this->parse($tmpl);	
+        } else {
+            echo "Not found view template:".$this->_action;
+        }
+    }
+	
+	private parse($filename)
+	{
+		ob_start();
+	 
 		//fetch object variable
 		extract($this->_data, EXTR_SKIP);
 		
-        $layout = APP_PATH . 'app/views/' . $this->_controller . '/' . $this->_action . '.php';
-      
-        if (file_exists($layout)) {
-            include $layout;
-        } else {
-            echo "Not found view template:".$this->_action;
-        }         
-    }
+		include $filename;
+		
+		$content = ob_get_contents();		
+		ob_end_clean();
+		
+		return $content;
+	}
 }

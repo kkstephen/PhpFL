@@ -1,5 +1,4 @@
-<?php
-require_once(APP_PATH.'/app/utils/PdoUnit.php');
+<?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
 class HomeController extends Controller 
 { 	

@@ -1,0 +1,149 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+// CodeIgniter i18n library by Jérôme Jaglale
+// http://maestric.com/en/doc/php/codeigniter_i18n
+// version 10 - May 10, 2012
+// Modify: Stephen Yeung, 2014-06
+ 
+class Uri {
+
+	/**************************************************
+	 configuration
+	***************************************************/
+	var $cfg;
+
+	// languages
+	var $languages;
+
+	var $uri_string;
+	
+	// special URIs (not localized)
+	var $special;
+	
+	public $segments;
+		 
+	/**************************************************/
+	
+	function __construct($config)
+	{
+		$this->cfg = $config;
+		
+		$this->languages = $this->cfg['i18n'];
+		//$this->special = $this->config->item('special_url');			
+		
+		$this->set_uri();
+	}
+	
+	function set_uri()
+	{
+		$this->uri_string = $_SERVER['REQUEST_URI'];
+		
+		$this->segments = explode('/', $this->uri_string);
+		
+		array_shift($this->segments);
+	}
+	
+	// get current language
+	// ex: return 'en' if language is 'english' 
+	function lang()
+	{	 		
+		$language = $this->cfg['default'];
+		
+		$lang = array_search($language, $this->languages);
+		
+		if ($lang)
+		{
+			return $lang;
+		}
+		
+		return NULL;	// this should not happen
+	}
+	
+	function is_special()
+	{ 
+		if (in_array($this->segments[0], $this->special))
+		{
+			return TRUE;
+		}
+		
+		/* if(isset($this->languages[$uri]))
+		{
+			return TRUE;
+		} */
+		return FALSE;
+	}
+	
+	function switch_uri($lang)
+	{ 
+		$uri = $this->uri_string();
+		
+		if ($this->has_language())
+		{
+			if ($lang != $this->lang())
+			{
+				$this->segments[0] = $lang;
+			}
+			
+			$uri = implode('/', $this->segments);
+		}
+		else {
+			$uri = $lang;
+		}
+		
+		return $uri;
+	}
+	
+	// is there a language segment in this $uri?
+	function has_language()
+	{
+		$first_segment = "";
+	
+		if(isset($this->segments[0])
+		{
+			if($this->segments[0] != '')
+			{
+				$first_segment = $this->segments[0];
+			}
+		}
+		
+		if($first_segment != "")
+		{
+			return isset($this->languages[$first_segment]);
+		}
+		
+		return FALSE;
+	}
+	
+	// default language: first element of $this->languages
+	function default_lang()
+	{
+		return $this->cfg['language'];
+	}
+	
+	function set_lang($uri_lang)
+	{ 
+		$language = $this->languages[$uri_lang];
+		$this->config->set_item('language', $language);		 
+	}
+	
+	// add language segment to $uri (if appropriate)
+	function localized()
+	{
+		if($this->has_language()
+				|| $this->is_special()
+				|| preg_match('/(.+)\.[a-zA-Z0-9]{2,4}$/', $this->uri_string))
+		{
+			// we don't need a language segment because:
+			// - there's already one or
+			// - it's a special uri (set in $special) or
+			// - that's a link to a file
+		}
+		else
+		{
+			$uri = $this->lang() . '/' .  $this->uri_string;
+		}
+		
+		return $uri;
+	}
+	
+}
