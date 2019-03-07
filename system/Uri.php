@@ -30,33 +30,34 @@ class Uri {
 		
 		$this->languages = $this->cfg['i18n'];
 		//$this->special = $this->config->item('special_url');			
-		
-		$this->set_uri();
 	}
 	
-	function set_uri()
-	{   
-		$url = $_SERVER['REQUEST_URI'];		
+	function set_uri($url)
+	{    
 		$pos = strpos($url, '?');
 		
         $this->uri_string = $pos === false ? $url : substr($url, 0, $position);
 	
 		$this->segments = explode('/', $this->uri_string);
 		
-		array_shift($this->segments);		
+		array_shift($this->segments);
 	}
 	
 	// get current language
 	// ex: return 'en' if language is 'english' 
 	function lang()
 	{	 		
-		$language = $this->cfg['default'];
-		
-		$lang = array_search($language, $this->languages);
-		
-		if ($lang)
-		{
-			return $lang;
+		if ($this->has_language()) {
+			$language = $this->languages[$this->segments[0]]; 
+		 		
+			if (isset($language)) {
+				$lang = array_search($language, $this->languages);
+				
+				if ($lang)
+				{
+					return $lang;
+				}
+			}
 		}
 		
 		return NULL;	// this should not happen
@@ -68,17 +69,13 @@ class Uri {
 		{
 			return TRUE;
 		}
-		
-		/* if(isset($this->languages[$uri]))
-		{
-			return TRUE;
-		} */
+		 
 		return FALSE;
 	}
 	
 	function switch_uri($lang)
 	{ 
-		$uri = $this->uri_string();
+		$uri = $this->uri_string;
 		
 		if ($this->has_language())
 		{
@@ -147,6 +144,5 @@ class Uri {
 		}
 		
 		return $uri;
-	}
-	
+	}	
 }

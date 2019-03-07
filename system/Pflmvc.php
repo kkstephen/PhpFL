@@ -34,7 +34,8 @@ class Pflmvc
         $param = array();
 		
 		// get request uri string 
-		$this->_uri->set_uri();
+		$url = $_SERVER['REQUEST_URI'];		
+		$this->_uri->set_uri($url);
 		
 		$segs = $this->_uri->segments;
 		
