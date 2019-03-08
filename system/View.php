@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 /**
  * 视图基类
  */
@@ -26,29 +26,38 @@ class View
 		$tmpl = APP_PATH . 'app/views/';
 		
 		if ($file_view == "") {
-			$tmpl .= $this->_controller.'/'.$this->_action . '.php';
+			$file_view = $tmpl.$this->_controller.'/'.$this->_action . '.php';
 		}
 		else {
-			$tmpl .= 'layout/'.$file_view . '.php';
+			$file_view = $tmpl.'layout/'.$file_view . '.php';
 		}
       
-        if (file_exists($tmpl)) {
-			echo $this->parse($tmpl);	
+        if (file_exists($file_view)) {
+			//header
+			echo $this->parse($tmpl.'layout/header.php', null);				
+			
+			echo $this->parse($file_view, $this->_data);	
+			
+			//footer
+			echo $this->parse($tmpl.'layout/footer.php', null);
         } else {
             echo "Not found view template:".$this->_action;
         }
     }
 	
-	private parse($filename)
-	{
-		ob_start();
-	 
+	private function parse($filename, $data)
+	{  
 		//fetch object variable
-		extract($this->_data, EXTR_SKIP);
+		if (isset($data)) {
+			extract($this->_data, EXTR_SKIP);		
+		}
 		
-		include $filename;
+		ob_start(); 
+		
+		require($filename);
 		
 		$content = ob_get_contents();		
+		
 		ob_end_clean();
 		
 		return $content;

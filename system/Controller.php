@@ -36,7 +36,7 @@ class Controller
 
     // render HTML
     public function Render($file = "")
-    {  
+    {  		
         $this->view->render($file);
     } 	 
 }

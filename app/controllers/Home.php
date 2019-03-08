@@ -11,17 +11,13 @@ class HomeController extends Controller
 	
 	public function index($id)
     {  
+		$this->ViewData('name', $this->input->Post("name"));
+		
         $this->Render();
     }
 	
 	public function detail($id)
-    {        
-		try		
-		{
-			$this->db->open();		 
-		} catch (Exception $e) {
-			$this->ViewData("error", 'Caught exception: '.$e->getMessage()); 			 
-		}	 
+    {        		
 		
         $this->Render();
     }

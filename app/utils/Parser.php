@@ -4,7 +4,7 @@ class Parser
 { 
 	public function Post($name = "")
 	{ 
-		return cleanJs($_POST[$name]);
+		return $this->cleanJs($_POST[$name]);
 	}
 
 	public function PostList($name = "")
@@ -20,7 +20,7 @@ class Parser
 	 
 	public function Get($p = "") 
 	{ 
-		return cleanJs($_GET[$p]);
+		return $this->cleanJs($_GET[$p]);
 	}
 
 	function cleanJs($html) {

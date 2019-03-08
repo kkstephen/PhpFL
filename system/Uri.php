@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
 // CodeIgniter i18n library by Jérôme Jaglale
 // http://maestric.com/en/doc/php/codeigniter_i18n
@@ -41,6 +41,14 @@ class Uri {
 		$this->segments = explode('/', $this->uri_string);
 		
 		array_shift($this->segments);
+	}
+			
+	// is there a language segment in this $uri?
+	function has_language()
+	{
+		$first_segment = $this->segments[0];	
+		
+		return isset($this->languages[$first_segment]);
 	}
 	
 	// get current language
@@ -92,38 +100,18 @@ class Uri {
 		
 		return $uri;
 	}
-	
-	// is there a language segment in this $uri?
-	function has_language()
-	{
-		$first_segment = "";
-	
-		if(isset($this->segments[0])
-		{
-			if($this->segments[0] != '')
-			{
-				$first_segment = $this->segments[0];
-			}
-		}
-		
-		if($first_segment != "")
-		{
-			return isset($this->languages[$first_segment]);
-		}
-		
-		return FALSE;
-	}
+
 	
 	// default language: first element of $this->languages
 	function default_lang()
 	{
-		return $this->cfg['language'];
+		return $this->cfg['default'];
 	}
 	
 	function set_lang($uri_lang)
 	{ 
 		$language = $this->languages[$uri_lang];
-		$this->config->set_item('language', $language);		 
+		//$this->config->set_item('language', $language);		 
 	}
 	
 	// add language segment to $uri (if appropriate)
@@ -145,4 +133,9 @@ class Uri {
 		
 		return $uri;
 	}	
+	
+	private function isNULLorEmpty($str) 
+	{
+		return !isset($str) || empty($str);
+	}
 }

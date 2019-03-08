@@ -7,7 +7,7 @@
  
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
 
-const PL_VERSION = '1.0';
+const PFL_VERSION = '1.0';
 
 class Pflmvc
 { 
@@ -28,8 +28,11 @@ class Pflmvc
     }
 
     // Route
-    public function setRoute()
+    private function setRoute()
     {
+		$this->_uri = new Uri($this->_config['language']);		
+		
+		$controllerName = $this->_config['default_controller'];
         $actionName = "index";
         $param = array();
 		
@@ -39,42 +42,50 @@ class Pflmvc
 		
 		$segs = $this->_uri->segments;
 		
-		$i = $this->_uri->has_language() ? 0 : 1;
-		     
+		$i = $this->_uri->has_language() ? 1 : 0;
+	 
 		// get controller name
-		$controllerName = isset($segs[$i]) ? $segs[$i++] : $this->_config['default'];
+		if (!$this->isNULLorEmpty($segs[$i])) {  
+			$controllerName = ucfirst($segs[$i]);
+		}
 		
+		$i++;
 		// get action name
-		$actionName = isset($segs[$i]) ? $segs[$i++] : "index";
+		if (!$this->isNULLorEmpty($segs[$i])) {  
+			$actionName = $segs[$i];
+		}
 		
+		$i++;
 		// get action id  
-		$param = isset($segs[$i]) ? $segs[$i] : "";       
+		if (!$this->isNULLorEmpty($segs[$i])) {
+			$param = $segs[$i];
+		}
 
         // class file
         $controller = APP_PATH.'app/controllers/'.$controllerName.'.php';
-
+			
 		if (file_exists($controller)) { 
 			require $controller; 
 		}
-		else {
-			exit('File miss:'.$controller);
+		else {			
+			exit('Page not found 404');
 		} 
 		
 		// class name
 		$className = $controllerName.'Controller';
- 
+		 
 		// create class instance
-		if (method_exists($className, $actionName)) {					
-			$instance = new $className();			
+		if (method_exists($className, $actionName)) {
+			$instance = new $className();
 			
 			$instance->init($controllerName, $actionName);
 			$instance->$actionName($param);
 		} else {
-			exit($controllerName . '404');
+			exit('Page not found 404');
 		}
 	}
 
-    public function setReporting()
+    private function setReporting()
     {
         if (APP_DEBUG === true) {
             error_reporting(E_ALL);
@@ -87,14 +98,14 @@ class Pflmvc
     }
 
     // remove symbol 
-    public function stripSlashesDeep($value)
+    private function stripSlashesDeep($value)
     {
         $value = is_array($value) ? array_map(array($this, 'stripSlashesDeep'), $value) : stripslashes($value);
         return $value;
     }
 
     // check charset 
-    public function removeMagicQuotes()
+    private function removeMagicQuotes()
     {
         if (get_magic_quotes_gpc()) {
             $_GET = isset($_GET) ? $this->stripSlashesDeep($_GET ) : '';
@@ -106,7 +117,7 @@ class Pflmvc
    
     // disable register_globals  
     // http://php.net/manual/zh/faq.using.php#faq.register-globals
-    public function unregisterGlobals()
+    private function unregisterGlobals()
     {
         if (ini_get('register_globals')) {
             $array = array('_SESSION', '_POST', '_GET', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
@@ -119,35 +130,33 @@ class Pflmvc
             }
         }
     }
+	
+	private function isNULLorEmpty($str) 
+	{
+		return !isset($str) || empty($str);
+	}
 
-    // load class
-    public function loadClass()
+    // load class 
+    private function loadClass()
     {
-        $this->coreClass();
-
-		$this->_uri = new Uri($this->_config);
-		
-    }
-
-    // class mapping
-    protected function coreClass()
-    {
-        $c = [
+        $cls = [
             1 => CORE_PATH . '/Controller.php',
 			2 => CORE_PATH . '/View.php',
 			3 => CORE_PATH . '/Uri.php'					
         ];
 		
-		foreach ($c as $f)
+		foreach ($cls as $f)
 		{
 		    require_once $f;
 		}
 		
 		$tools = $this->_config['utils'];
 		
+		$path = APP_PATH.'app/utils/';
+		
 		foreach ($tools as $t)
 		{
-		    require_once $t;
+			require_once $path.$t.'.php';			 
 		}
     }
 }

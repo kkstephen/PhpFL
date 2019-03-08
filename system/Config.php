@@ -12,8 +12,8 @@ $config["sskey"] = "A0A68F21340A4A589381F1B7F8681BEC";
 $config['default_controller'] = 'Home';
 
 // lang
-$config['language']	= array('default' => 'english', 'i18n' => array("zh_hk" => "chinese", "en_us" => "english")); 
+$config['language']	= array('default' => 'english', 'i18n' => array("zh-hk" => "chinese", "en-us" => "english")); 
 
 // tools
-$config['utils'] = array("PdoUnit", "Parser", "Uri");
+$config['utils'] = array("PdoUnit", "Parser");
  
