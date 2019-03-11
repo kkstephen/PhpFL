@@ -7,11 +7,17 @@ class View
     protected $_data = array();
     protected $_controller;
     protected $_action;
+	
+	public $header;
+	public $footer;
 
     function __construct($controller, $action)
     {
         $this->_controller = strtolower($controller);
         $this->_action = strtolower($action);
+		
+		$this->header = 'layout/header';
+		$this->footer = 'layout/footer';
     }
  
     // save variable
@@ -26,22 +32,21 @@ class View
 		$tmpl = APP_PATH . 'app/views/';
 		
 		if ($file_view == "") {
-			$file_view = $tmpl.$this->_controller.'/'.$this->_action . '.php';
+			$file_view = $this->_action;
 		}
-		else {
-			$file_view = $tmpl.'layout/'.$file_view . '.php';
-		}
-      
-        if (file_exists($file_view)) {
+
+		$body = $tmpl.$this->_controller.'/'.$file_view . '.php';
+		
+        if (file_exists($body)) {
 			//header
-			echo $this->parse($tmpl.'layout/header.php', null);				
+			echo $this->parse($tmpl.$this->header.'.php', null);				
 			
-			echo $this->parse($file_view, $this->_data);	
+			echo $this->parse($body, $this->_data);	
 			
 			//footer
-			echo $this->parse($tmpl.'layout/footer.php', null);
+			echo $this->parse($tmpl.$this->footer.'.php', null);
         } else {
-            echo "Not found view template:".$this->_action;
+            echo "Not found view template:".$file_view;
         }
     }
 	
@@ -54,7 +59,7 @@ class View
 		
 		ob_start(); 
 		
-		require($filename);
+		include $filename;
 		
 		$content = ob_get_contents();		
 		

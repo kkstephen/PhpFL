@@ -1,6 +1,6 @@
 <?php 
 
-class Parser 
+class Parser
 { 
 	public function Post($name = "")
 	{ 
@@ -40,5 +40,3 @@ class Parser
 	    return preg_replace($pattern,$replace,$html);  
 	}
 }
-
-?>

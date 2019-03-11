@@ -11,12 +11,12 @@ const PFL_VERSION = '1.0';
 
 class Pflmvc
 { 
-    protected $_config = [];
+    public static $Config;
 	private $_uri; 
 	
     public function __construct($config)
     {
-        $this->_config = $config;
+		self::$Config = $config;
     }
  
     public function run()
@@ -26,13 +26,13 @@ class Pflmvc
 		$this->loadClass(); 
         $this->setRoute();
     }
-
+	
     // Route
     private function setRoute()
     {
-		$this->_uri = new Uri($this->_config['language']);		
+		$this->_uri = new Uri(self::$Config['language']);		
 		
-		$controllerName = $this->_config['default_controller'];
+		$controllerName = self::$Config['default_controller'];
         $actionName = "index";
         $param = array();
 		
@@ -142,7 +142,8 @@ class Pflmvc
         $cls = [
             1 => CORE_PATH . '/Controller.php',
 			2 => CORE_PATH . '/View.php',
-			3 => CORE_PATH . '/Uri.php'					
+			3 => CORE_PATH . '/helper/Uri.php',
+			4 => CORE_PATH . '/helper/Parser.php'						
         ];
 		
 		foreach ($cls as $f)
@@ -150,7 +151,7 @@ class Pflmvc
 		    require_once $f;
 		}
 		
-		$tools = $this->_config['utils'];
+		$tools = self::$Config['utils'];
 		
 		$path = APP_PATH.'app/utils/';
 		
@@ -159,4 +160,19 @@ class Pflmvc
 			require_once $path.$t.'.php';			 
 		}
     }
+	
+	private function error_notfound()
+	{
+		$tmpl = APP_PATH . 'app/views/layout/notfound.php';
+		
+		ob_start(); 
+		
+		require($tmpl);
+		
+		$content = ob_get_contents();		
+		
+		ob_end_clean();
+		
+		return $content;
+	}
 }

@@ -9,7 +9,7 @@ define('APP_DEBUG', true);
 require(APP_PATH . 'system/Pflmvc.php');
 
 // load config
-require(APP_PATH . 'system/Config.php');
+require(APP_PATH . 'app/config.php');
 
 // create mvc instance
 (new Pflmvc($config))->run();
