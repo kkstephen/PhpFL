@@ -97,8 +97,14 @@ abstract class Repository {
 	}
 	
 	public function remove($id) {		
-		$sql = 'DELETE FROM '.$this->table.' WHERE id = ?';		
+		$sql = 'delete from '.$this->table.' WHERE id = ?;';		
 		
 		return $this->db->delete($sql, $id);
+	}
+	
+	public function clear() {
+		$sql = 'delete from '.$this->table.';';		
+		
+		return $this->db->execute($sql);
 	}
 }

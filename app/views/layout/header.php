@@ -13,4 +13,4 @@
 <script src="<?php html_js('jquery.min', '2') ?>" type="text/javascript"></script>
 <script src="<?php html_js('uikit.min', '2.28') ?>" type="text/javascript"></script>    
 <script src="<?php html_js('vue.min', '2') ?>" type="text/javascript"></script>
-<title>Welcome</title>
+<title>Juniper Online Feedback Form</title>
