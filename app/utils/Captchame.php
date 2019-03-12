@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
 class CaptchaMe {
 	public $api;

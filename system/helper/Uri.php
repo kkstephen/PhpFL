@@ -132,10 +132,5 @@ class Uri {
 		}
 		
 		return $uri;
-	}	
-	
-	private function isNULLorEmpty($str) 
-	{
-		return !isset($str) || empty($str);
 	}
 }

@@ -1,4 +1,4 @@
-<?php
+<?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 // php-export-data by Eli Dickinson, http://github.com/elidickinson/php-export-data
 
 /**

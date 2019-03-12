@@ -1,4 +1,5 @@
- 
+</head>
+<body>
 <a href="/home/index">Home</a> | <a href="/home/detail">Detail</a>
 	<h1>Hello, world.</h1>
 	<form method="POST">

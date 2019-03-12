@@ -1,4 +1,4 @@
-<?php 
+<?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
  
 function html_css($file, $ver) {
 	echo html_asset('styles/'.$file.'.css?v='.$ver);

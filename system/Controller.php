@@ -38,15 +38,5 @@ class Controller
     public function Render($file = "")
     {  		
         $this->view->render($file);
-    } 	 
-	
-	public function SetHeader($file) 
-	{
-		$this->view->$header = $file;
-	}
-	
-	public function SetFooter($file)
-	{
-		$this->view->$footer = $file;
-	}
+    }	 
 }

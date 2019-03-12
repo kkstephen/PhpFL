@@ -16,7 +16,7 @@ $config['default_controller'] = 'Home';
 $config['language']	= array('default' => 'english', 'i18n' => array("zh-hk" => "chinese", "en-us" => "english")); 
 
 // tools
-$config['utils'] = array("PdoUnit", "Html", "Form");
+$config['utils'] = array("Html", "Form", "Route", "PdoUnit");
 
 // route
 $config['route'] = array('^zh-hk' => '', '^en-us' => '');

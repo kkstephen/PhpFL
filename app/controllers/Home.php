@@ -6,27 +6,25 @@ class HomeController extends Controller
     { 
 		parent::__construct();
 		
-		$this->db = new PdoUnit();
+		$this->unit = new PdoUnit();
     }
 	
 	public function index($id)
     {
-		$this->ViewData('name', $this->input->Post("name"));
-
-        $this->Render();
+		redirect("/feedback");
     }
 		
 	public function detail($id)
     { 
 		try
 		{
-			$this->db->open();
+			$this->unit->open();
 
-			$this->db->close();
+			$this->unit->close();
 		}
 		catch (Exception $e)
 		{
-			$this->ViewData('msg', $e->getMessage());
+			$this->ViewData('error', $e->getMessage());
 		}
 		
         $this->Render();

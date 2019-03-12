@@ -1,4 +1,5 @@
-<?php 
+<?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
+
 require_once(APP_PATH.'/system/db/Database.php');
 require_once(APP_PATH.'/system/db/Repository.php');
 require_once(APP_PATH.'/system/db/UnitORM.php');
@@ -25,7 +26,7 @@ class MyRepository extends Repository {
 			[company] TEXT NULL,
 			[title] TEXT NULL,		 
 			[tel] TEXT NULL,			
-			[Rating] TEXT NULL, 
+			[rating] TEXT NULL, 
 			[interest] TEXT NULL,
 			[solutions] TEXT NULL,
 			[solu_other] TEXT NULL,		 

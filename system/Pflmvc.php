@@ -45,19 +45,19 @@ class Pflmvc
 		$i = $this->_uri->has_language() ? 1 : 0;
 	 
 		// get controller name
-		if (!$this->isNULLorEmpty($segs[$i])) {  
+		if (!isNULLorEmpty($segs[$i])) {  
 			$controllerName = ucfirst($segs[$i]);
 		}
 		
 		$i++;
 		// get action name
-		if (!$this->isNULLorEmpty($segs[$i])) {  
+		if (!isNULLorEmpty($segs[$i])) {  
 			$actionName = $segs[$i];
 		}
 		
 		$i++;
 		// get action id  
-		if (!$this->isNULLorEmpty($segs[$i])) {
+		if (!isNULLorEmpty($segs[$i])) {
 			$param = $segs[$i];
 		}
 
@@ -129,12 +129,7 @@ class Pflmvc
                 }
             }
         }
-    }
-	
-	private function isNULLorEmpty($str) 
-	{
-		return !isset($str) || empty($str);
-	}
+    }	
 
     // load class 
     private function loadClass()
@@ -142,8 +137,9 @@ class Pflmvc
         $cls = [
             1 => CORE_PATH . '/Controller.php',
 			2 => CORE_PATH . '/View.php',
-			3 => CORE_PATH . '/helper/Uri.php',
-			4 => CORE_PATH . '/helper/Parser.php'						
+			3 => CORE_PATH . '/helper/String.php',
+			4 => CORE_PATH . '/helper/Uri.php',
+			5 => CORE_PATH . '/helper/Parser.php'							
         ];
 		
 		foreach ($cls as $f)

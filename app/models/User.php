@@ -9,8 +9,8 @@ class User {
 	public $tel;
 	public $title;
 	public $company; 
-	public $Rating;
 	
+	public $rating;	
 	public $interest;
 	public $solutions;
 	public $solu_other;

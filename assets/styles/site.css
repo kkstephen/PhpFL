@@ -53,14 +53,14 @@ sub, sup {
 }
 
 .jp-form-input div {
-	padding: 3px;
+	padding: 5px;
 	box-sizing: border-box;
 }
  
 .jp-textbox {
 	width: 100%;
 	box-sizing: border-box;
-	padding: 3px;
+	padding: 5px;
 	border: 1px solid #c3c3c3;
 }
 

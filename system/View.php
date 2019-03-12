@@ -10,7 +10,7 @@ class View
 	
 	public $header;
 	public $footer;
-
+	
     function __construct($controller, $action)
     {
         $this->_controller = strtolower($controller);
