@@ -20,7 +20,7 @@ class Uri {
 	// special URIs (not localized)
 	var $special;
 	
-	public $segments;
+	var $segments;
 		 
 	/**************************************************/
 	
@@ -28,11 +28,10 @@ class Uri {
 	{
 		$this->cfg = $config;
 		
-		$this->languages = $this->cfg['i18n'];
-		//$this->special = $this->config->item('special_url');			
+		$this->languages = $this->cfg['i18n'];	
 	}
-	
-	function set_uri($url)
+
+	function get_segments($url)
 	{    
 		$pos = strpos($url, '?');
 		
@@ -41,16 +40,22 @@ class Uri {
 		$this->segments = explode('/', $this->uri_string);
 		
 		array_shift($this->segments);
+		
+		return $this->segments;
 	}
-			
+
 	// is there a language segment in this $uri?
 	function has_language()
 	{
-		$first_segment = $this->segments[0];	
+		if (is_special($this->segments[0])) {
+			$lang_segment = $this->segments[1];	
+		} else {
+			$lang_segment = $this->segments[0];	
+		}		
 		
-		return isset($this->languages[$first_segment]);
+		return isset($this->languages[$lang_segment]);
 	}
-	
+
 	// get current language
 	// ex: return 'en' if language is 'english' 
 	function lang()
@@ -69,68 +74,11 @@ class Uri {
 		}
 		
 		return NULL;	// this should not happen
-	}
-	
-	function is_special()
-	{ 
-		if (in_array($this->segments[0], $this->special))
-		{
-			return TRUE;
-		}
-		 
-		return FALSE;
-	}
-	
-	function switch_uri($lang)
-	{ 
-		$uri = $this->uri_string;
-		
-		if ($this->has_language())
-		{
-			if ($lang != $this->lang())
-			{
-				$this->segments[0] = $lang;
-			}
-			
-			$uri = implode('/', $this->segments);
-		}
-		else {
-			$uri = $lang;
-		}
-		
-		return $uri;
-	}
-
+	}	 
 	
 	// default language: first element of $this->languages
 	function default_lang()
 	{
 		return $this->cfg['default'];
-	}
-	
-	function set_lang($uri_lang)
-	{ 
-		$language = $this->languages[$uri_lang];
-		//$this->config->set_item('language', $language);		 
-	}
-	
-	// add language segment to $uri (if appropriate)
-	function localized()
-	{
-		if($this->has_language()
-				|| $this->is_special()
-				|| preg_match('/(.+)\.[a-zA-Z0-9]{2,4}$/', $this->uri_string))
-		{
-			// we don't need a language segment because:
-			// - there's already one or
-			// - it's a special uri (set in $special) or
-			// - that's a link to a file
-		}
-		else
-		{
-			$uri = $this->lang() . '/' .  $this->uri_string;
-		}
-		
-		return $uri;
-	}
+	}	 
 }

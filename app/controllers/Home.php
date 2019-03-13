@@ -2,31 +2,13 @@
 
 class HomeController extends Controller 
 { 	
-	public function __construct()
+	function __construct()
     { 
-		parent::__construct();
-		
-		$this->unit = new PdoUnit();
+		parent::__construct();		 
     }
 	
-	public function index($id)
+	function index($id)
     {
-		routeTo("feedback", "index");
-    }
-		
-	public function detail($id)
-    { 
-		try
-		{
-			$this->unit->open();
-
-			$this->unit->close();
-		}
-		catch (Exception $e)
-		{
-			$this->ViewData('error', $e->getMessage());
-		}
-		
-        $this->Render();
-    }
+		$this->Render();
+    } 
 }

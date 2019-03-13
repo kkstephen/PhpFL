@@ -3,13 +3,13 @@
 class UnitORM {
  	protected $db;
 	
-	public function open()
+	function open()
 	{
 		if ($this->db != null)			
 			$this->db->open();
 	}
 	
-	public function close() 
+	function close() 
 	{
 		if ($this->db != null)
 			$this->db->close();

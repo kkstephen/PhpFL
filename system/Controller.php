@@ -10,14 +10,14 @@ class Controller
 	
     protected $view;
 	protected $input;
-	protected $db;
+	protected $session;
 	 
-    public function __construct()
+    function __construct()
     { 
-		$this->input = new Parser(); 
+		$this->input = new Parser(); 		
     }
     
-	public function init($controller, $action) 
+	function init($controller, $action) 
 	{
 		$this->_name = $controller;
 		$this->_action = $action; 
@@ -29,13 +29,13 @@ class Controller
 	}
 
 	// set view data
-    public function ViewData($name, $value)
+    function ViewData($name, $value)
     { 
         $this->view->assign($name, $value);
     }		
 
     // render HTML
-    public function Render($file = "")
+    function Render($file = "")
     {  		
         $this->view->render($file);
     }	 

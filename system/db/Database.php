@@ -6,9 +6,9 @@ class Database {
      * @var type 
      */
     protected $pdo;
-	public $conn;
+	var $conn;
  
-    public function __construct($connStr)
+    function __construct($connStr)
     {
         $this->conn = $connStr;
     }
@@ -17,7 +17,7 @@ class Database {
      * return in instance of the PDO object that connects to the SQLite database
      * @return PDO
      */
-    public function open() {
+    function open() {
 		
 		if ($this->pdo == null) {
 			$this->pdo = new PDO($this->conn["host"]);
@@ -25,11 +25,11 @@ class Database {
         }
 	}
 	
-	public function close() {
+	function close() {
 		$this->pdo = null;
 	}
 	
-	public function query($sql, $key) {
+	function query($sql, $key) {
 		$stmt = $this->pdo->prepare($sql);		
 		$stmt->execute(array($key));
 
@@ -40,7 +40,7 @@ class Database {
 		return $row;		
 	}
 	
-	public function querys($sql, $params) {
+	function querys($sql, $params) {
 		$stmt = $this->pdo->prepare($sql);
 		
 		$stmt->execute($params);		
@@ -51,7 +51,7 @@ class Database {
 		return $rows;
 	}
 	
-	public function insert($table, $cols, $values) {
+	function insert($table, $cols, $values) {
 		$n = count($cols);
 		
 		$sql = 'INSERT INTO '.$table.' ('.implode(", ",$cols).') VALUES ('.implode(',', array_fill(0, $n, '?')).')';
@@ -64,7 +64,7 @@ class Database {
 		$this->pdo->lastInsertId();		
 	}
 	
-	public function delete($sql, $key) {		
+	function delete($sql, $key) {		
 		$stmt = $this->pdo->prepare($sql);		
 		
 		$stmt->execute(array($key));		
@@ -76,7 +76,7 @@ class Database {
 		return $i;
 	}
 	
-	public function execute($sql) {
+	function execute($sql) {
 		$this->pdo->exec($sql);
 	}
 }

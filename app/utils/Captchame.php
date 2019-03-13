@@ -1,17 +1,17 @@
 <?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
 class CaptchaMe {
-	public $api;
-	public $skey;
-	public $gcaptcha;	
-	public $ip;
-	public $response;
+	var $api;
+	var $skey;
+	var $gcaptcha;	
+	var $ip;
+	var $response;
 	
-	public function __construct($url = "") {	 
+	function __construct($url = "") {	 
 		$this->api = $url;
 	}
 	
-	public function verify() {
+	function verify() {
 	
 		$data = array(
 			'secret' => $this->skey,
@@ -38,5 +38,3 @@ class CaptchaMe {
 		return $json["success"];
     }
 }
-
-?>

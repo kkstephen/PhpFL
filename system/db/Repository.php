@@ -5,13 +5,13 @@ abstract class Repository {
 	protected $model;	 
 	protected $table; 	 
 	
-	public function __construct($db) {
+	function __construct($db) {
         $this->db = $db;
     }  
 	
 	abstract public function create();
 	
-	public function get($id)
+	function get($id)
 	{
 		$sql = "SELECT * FROM ".$this->table." where id = ?;";
 		
@@ -35,7 +35,7 @@ abstract class Repository {
 		return $user;		
 	}	
 	
-	public function tolist()
+	function tolist()
 	{
 		$sql = "SELECT * FROM ".$this->table." where id > ?;";
 		$rows = $this->db->querys($sql, array(0));
@@ -69,7 +69,7 @@ abstract class Repository {
 		return $list;	 
 	}
 	
-	public function add($model) {
+	function add($model) {
 		$reflect = new ReflectionClass($model);
 		$props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
 
@@ -89,20 +89,20 @@ abstract class Repository {
         return $id;
     }	
 	
-	public function drop()
+	function drop()
 	{		
 		$sql = "drop table ".$this->table; 	
 		
 		$this->db->execute($sql); 
 	}
 	
-	public function remove($id) {		
+	function remove($id) {		
 		$sql = 'delete from '.$this->table.' WHERE id = ?;';		
 		
 		return $this->db->delete($sql, $id);
 	}
 	
-	public function clear() {
+	function clear() {
 		$sql = 'delete from '.$this->table.';';		
 		
 		return $this->db->execute($sql);

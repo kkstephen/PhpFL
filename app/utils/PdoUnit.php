@@ -7,7 +7,7 @@ require_once(APP_PATH.'/app/models/User.php');
 
 class MyRepository extends Repository {
 	
-	public function __construct($db)
+	function __construct($db)
 	{
 		$this->model = new User();
 		$this->table = "feedback"; //table
@@ -15,7 +15,7 @@ class MyRepository extends Repository {
 		parent::__construct($db); 
 	}
   
-	public function create()
+	function create()
 	{		
 		$sql = 'CREATE TABLE [feedback] ( 
 		    [id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -45,9 +45,9 @@ class MyRepository extends Repository {
 }
 
 class PdoUnit extends UnitORM {
-	public $feedback;
+	var $feedback;
  
-	public function __construct() 
+	function __construct() 
 	{
 		$this->db = new Database(Pflmvc::$Config['db']);		
         $this->feedback = new MyRepository($this->db);	 

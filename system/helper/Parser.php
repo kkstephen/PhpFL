@@ -2,12 +2,12 @@
 
 class Parser
 { 
-	public function Post($name = "")
+	function Post($name = "")
 	{ 
 		return $this->cleanJs($_POST[$name]);
 	}
 
-	public function PostList($name = "")
+	function PostList($name = "")
 	{
 		$list = array();
 		
@@ -18,12 +18,13 @@ class Parser
 		return implode(",", $list);
 	}
 	 
-	public function Get($p = "") 
+	function Get($p = "") 
 	{ 
 		return $this->cleanJs($_GET[$p]);
 	}
 
-	function cleanJs($html) {
+	private function cleanJs($html)
+	{
 		$html = trim($html);  
 		$html = str_replace(array('<?','?>'),array('<?','?>'),$html);  
 		

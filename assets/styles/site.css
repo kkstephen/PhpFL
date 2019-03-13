@@ -41,15 +41,20 @@ sub, sup {
 	margin-bottom: 10px;
 }
 
+.uk-modal-dialog {
+	width: 700px;
+}
+
 .uk-padding { padding: 3px; }
 
 /** Juniper **/
 
 .jp-container {
-	width: 1200px;
+	width: 970px;
 	box-sizing: border-box;
 	padding: 2px;
 	margin: 0 auto;
+	color: #444444;
 }
 
 .jp-form-input div {
@@ -101,4 +106,3 @@ sub, sup {
 		margin: 0;
 	}
 }
-

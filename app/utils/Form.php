@@ -26,8 +26,8 @@ function form_checkbox_group($name, $input, $list, $attr = "") {
 	} 
 }
 
-function form_radio($name, $val, $bool, $attr = "") {
-	$chk = $bool ? "checked" : "";
+function form_radio($name, $val, $input, $attr = "") {
+	$chk = $input == $val ? "checked" : "";
 	echo '<input type="radio" name="'.$name.'" value="'.$val.'" '.$chk.' '. $attr.' />';	
 }
 
@@ -35,11 +35,10 @@ function form_radio_group($name, $input, $list, $attr = "") {
 	$i = 1;
 	
 	foreach($list as $key => $val) {	 
-		form_radio($name, $key, $input == $key, $attr);
+		form_radio($name, $key, $input, $attr);
 		form_label($name."_r".$i, $val);
 		
 		$i++;
 	} 
 }
-
  

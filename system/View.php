@@ -8,8 +8,8 @@ class View
     protected $_controller;
     protected $_action;
 	
-	public $header;
-	public $footer;
+	var $header;
+	var $footer;
 	
     function __construct($controller, $action)
     {
@@ -21,13 +21,13 @@ class View
     }
  
     // save variable
-    public function assign($name, $value)
+    function assign($name, $value)
     {
         $this->_data[$name] = $value;
     }
  
     // output HMTL
-    public function render($file_view)
+    function render($file_view)
     {
 		$tmpl = APP_PATH . 'app/views/';
 		

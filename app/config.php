@@ -16,8 +16,8 @@ $config['default_controller'] = 'Home';
 $config['language']	= array('default' => 'english', 'i18n' => array("zh-hk" => "chinese", "en-us" => "english")); 
 
 // tools
-$config['utils'] = array("Html", "Form", "Route", "PdoUnit");
+$config['utils'] = array("Html", "Form", "Route", "PdoUnit", "Session");
 
 // route
-$config['route'] = array('^zh-hk' => '', '^en-us' => '');
+$config['area'] = array('juniper');
  

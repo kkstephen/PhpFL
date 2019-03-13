@@ -2,28 +2,28 @@
 
 class User {	
 	// property declaration
-	public $event_id;
-    public $fname;
-	public $lname;
-    public $email;
-	public $tel;
-	public $title;
-	public $company; 
+	var $event_id;
+    var $fname;
+	var $lname;
+    var $email;
+	var $tel;
+	var $title;
+	var $company; 
 	
-	public $rating;	
-	public $interest;
-	public $solutions;
-	public $solu_other;
-	public $training;
-	public $joincamp;
-	public $likeus;
-	public $meeting;
-	public $likeother;
-	public $phonecall;
-	public $promote;
+	var $rating;	
+	var $interest;
+	var $solutions;
+	var $solu_other;
+	var $training;
+	var $joincamp;
+	var $likeus;
+	var $meeting;
+	var $likeother;
+	var $phonecall;
+	var $promote;
 	
-	public $create_date;
-	public $ip;
+	var $create_date;
+	var $ip;
 }
 
 

@@ -9,17 +9,19 @@ defined('CORE_PATH') or define('CORE_PATH', __DIR__);
 
 const PFL_VERSION = '1.0';
 
+$url_segments;
+
 class Pflmvc
 { 
     public static $Config;
 	private $_uri; 
 	
-    public function __construct($config)
+    function __construct($config)
     {
 		self::$Config = $config;
     }
  
-    public function run()
+    function run()
     { 
         $this->removeMagicQuotes();
         $this->unregisterGlobals();
@@ -30,35 +32,42 @@ class Pflmvc
     // Route
     private function setRoute()
     {
+		global $url_segments;
+		
 		$this->_uri = new Uri(self::$Config['language']);		
 		
 		$controllerName = self::$Config['default_controller'];
         $actionName = "index";
         $param = array();
 		
-		// get request uri string 
-		$url = $_SERVER['REQUEST_URI'];		
-		$this->_uri->set_uri($url);
+		// get request uri string 			 
+		$url_segments = $this->_uri->get_segments($_SERVER['REQUEST_URI']);
+	 
+		$i = 0;
 		
-		$segs = $this->_uri->segments;
+		if (base_url() != "") {
+			$i++;			
+		}
 		
-		$i = $this->_uri->has_language() ? 1 : 0;
+		if ($this->_uri->has_language()) {
+			$i++;
+		}
 	 
 		// get controller name
-		if (!isNULLorEmpty($segs[$i])) {  
-			$controllerName = ucfirst($segs[$i]);
+		if (!isNULLorEmpty($url_segments[$i])) {  
+			$controllerName = ucfirst($url_segments[$i]);
 		}
 		
 		$i++;
 		// get action name
-		if (!isNULLorEmpty($segs[$i])) {  
-			$actionName = $segs[$i];
+		if (!isNULLorEmpty($url_segments[$i])) {  
+			$actionName = $url_segments[$i];
 		}
 		
 		$i++;
 		// get action id  
-		if (!isNULLorEmpty($segs[$i])) {
-			$param = $segs[$i];
+		if (!isNULLorEmpty($url_segments[$i])) {
+			$param = $url_segments[$i];
 		}
 
         // class file
@@ -69,7 +78,7 @@ class Pflmvc
 		}
 		else {			
 			exit('Page not found 404');
-		} 
+		}
 		
 		// class name
 		$className = $controllerName.'Controller';
@@ -170,5 +179,5 @@ class Pflmvc
 		ob_end_clean();
 		
 		return $content;
-	}
+	}		
 }
