@@ -38,5 +38,9 @@ class Controller
     function Render($file = "")
     {  		
         $this->view->render($file);
-    }	 
+    }
+	
+	function Title($str) {
+		$this->view->title($str);
+	}
 }
