@@ -1,4 +1,4 @@
-<?php 
+<?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
 class Database {
     /**
@@ -74,8 +74,17 @@ class Database {
 		$stmt = null;
 		
 		return $i;
-	}
+	}		
 	
+	function count($table) {
+		$q = $this->pdo->query("SELECT count(*) from ".$table);
+		$row = $q->fetch();
+		
+		$q = null;
+		
+		return $row[0];
+	}
+
 	function execute($sql) {
 		$this->pdo->exec($sql);
 	}

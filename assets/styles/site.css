@@ -52,7 +52,7 @@ sub, sup {
 .jp-container {
 	width: 970px;
 	box-sizing: border-box;
-	padding: 2px;
+	padding: 3px;
 	margin: 0 auto;
 	color: #444444;
 }
