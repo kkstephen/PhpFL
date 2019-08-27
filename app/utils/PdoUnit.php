@@ -1,8 +1,5 @@
 <?php  if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
-require_once(APP_PATH.'/system/db/Database.php');
-require_once(APP_PATH.'/system/db/Repository.php');
-require_once(APP_PATH.'/system/db/UnitORM.php');
 require_once(APP_PATH.'/app/models/User.php');
 
 class MyRepository extends Repository {
@@ -16,7 +13,7 @@ class MyRepository extends Repository {
 	}
   
 	function create()
-	{		
+	{
 		$sql = 'CREATE TABLE [feedback] ( 
 		    [id] INTEGER  PRIMARY KEY AUTOINCREMENT NOT NULL,
 			[event_id] TEXT NULL,	 

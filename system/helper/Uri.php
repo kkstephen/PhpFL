@@ -55,6 +55,14 @@ class Uri {
 		
 		return isset($this->languages[$lang_segment]);
 	}
+	
+	function get_area() {
+		if (is_special($this->segments[0])) {
+			return $this->segments[0];
+		}
+		
+		return "";
+	}
 
 	// get current language
 	// ex: return 'en' if language is 'english' 

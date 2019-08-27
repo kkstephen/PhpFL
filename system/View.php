@@ -9,16 +9,24 @@ class View
     
 	var $_data = array();
 	var $_header = array();
-	var $tmp_header;
-	var $tmpl_footer;
+	
+	var $_root;
+	
+	var $template;
+	var $tpl_header;
+	var $tpl_footer;
 	
     function __construct($controller, $action)
     {
         $this->_controller = strtolower($controller);
         $this->_action = strtolower($action);
 		
-		$this->tmp_header = 'layout/header.php';
-		$this->tmpl_footer = 'layout/footer.php';
+		$this->tpl_header = "header.php";
+		$this->tpl_footer = "footer.php";
+		
+		$this->template = "layout";
+		
+	    $this->_root = "";
     }
 	
 	//title 
@@ -26,6 +34,18 @@ class View
 	{
 		$this->_header["header_title"] = $str;	
 	}
+	
+	function set_layout($file) 
+	{
+		$this->template = $file;
+	}
+
+	function set_root($path) 
+	{		
+		if ($path != "") {
+			$this->_root = "area/".$path."/";
+		}
+	}	
  
     // save variable
     function assign($name, $value)
@@ -36,8 +56,8 @@ class View
     // output HMTL
     function render($file_view)
     {
-		$tmpl = APP_PATH . 'app/views/';
-		
+		$tmpl = APP_PATH.'app/'. $this->_root. 'views/';
+		 
 		if ($file_view == "") {
 			$file_view = $this->_action;
 		}
@@ -46,14 +66,14 @@ class View
 		
         if (file_exists($body)) {
 			//header
-			echo $this->parse($tmpl.$this->tmp_header, $this->_header);				
+			echo $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$this->tpl_header, $this->_header);				
 			
 			echo $this->parse($body, $this->_data);	
 			
 			//footer
-			echo $this->parse($tmpl.$this->tmpl_footer, null);
+			echo $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$this->tpl_footer, null);
         } else {
-            echo "Not found view template:".$file_view;
+            exit("Not found view file.");
         }
     }
 	

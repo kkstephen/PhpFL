@@ -36,7 +36,7 @@ class Parser
 		   "'<link[^>]*?>'si"  
 	    );  
 	   
-	    $replace=array("","","","","");  
+	    $replace = array("","","","","");  
 	   
 	    return preg_replace($pattern,$replace,$html);  
 	}

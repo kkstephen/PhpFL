@@ -7,7 +7,7 @@
  
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
 
-const PFL_VERSION = '1.0';
+const PFL_VERSION = '1.01';
 
 $url_segments;
 
@@ -40,19 +40,25 @@ class Pflmvc
         $actionName = "index";
         $param = array();
 		
-		// get request uri string 			 
+		// get request uri string: area/controller/action/id
 		$url_segments = $this->_uri->get_segments($_SERVER['REQUEST_URI']);
 	 
 		$i = 0;
-		
-		if (base_url() != "") {
-			$i++;			
-		}
-		
+		$appPath = APP_PATH.'app/';
+	
+		$area = $this->_uri->get_area();
+
+		if (!isNULLorEmpty($area)) {
+			$i++;
+			
+			$appPath .= "area/".$area."/";
+		}			
+
+		// get lang code: lang/controller/action/id
 		if ($this->_uri->has_language()) {
 			$i++;
 		}
-	 
+		
 		// get controller name
 		if (!isNULLorEmpty($url_segments[$i])) {  
 			$controllerName = ucfirst($url_segments[$i]);
@@ -71,13 +77,13 @@ class Pflmvc
 		}
 
         // class file
-        $controller = APP_PATH.'app/controllers/'.$controllerName.'.php';
+        $controller = $appPath.'controllers/'.$controllerName.'.php';
 			
 		if (file_exists($controller)) { 
 			require $controller; 
 		}
-		else {			
-			exit('Page not found 404');
+		else {			 
+			exit('controller not found: '. $controller);
 		}
 		
 		// class name
@@ -87,10 +93,10 @@ class Pflmvc
 		if (method_exists($className, $actionName)) {
 			$instance = new $className();
 			
-			$instance->init($controllerName, $actionName);
+			$instance->init($area, $controllerName, $actionName);
 			$instance->$actionName($param);
 		} else {
-			exit('Page not found 404');
+			exit('action not found');
 		}
 	}
 
@@ -148,7 +154,10 @@ class Pflmvc
 			2 => CORE_PATH . '/View.php',
 			3 => CORE_PATH . '/helper/String.php',
 			4 => CORE_PATH . '/helper/Uri.php',
-			5 => CORE_PATH . '/helper/Parser.php'							
+			5 => CORE_PATH . '/helper/Parser.php',
+			6 => CORE_PATH . '/db/Database.php',
+			7 => CORE_PATH . '/db/Repository.php',
+			8 => CORE_PATH . '/db/UnitORM.php'			
         ];
 		
 		foreach ($cls as $f)

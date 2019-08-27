@@ -3,7 +3,7 @@
 define('CONTENT', '/assets/');
 
 // database
-$config['db']['host'] = 'sqlite:'.APP_PATH.'assets/data/event.db3';
+$config['db']['host'] = 'sqlite:'.APP_PATH.'data/event.db3';
 $config['db']['username'] = '';
 $config['db']['password'] = '';
 
@@ -16,8 +16,8 @@ $config['default_controller'] = 'Home';
 $config['language']	= array('default' => 'english', 'i18n' => array("zh-hk" => "chinese", "en-us" => "english")); 
 
 // tools
-$config['utils'] = array("Html", "Form", "Route", "PdoUnit", "Session");
+$config['utils'] = array("Html", "Form", "Route", "Session", "PdoUnit");
 
 // route
-$config['area'] = array('juniper');
+$config['area'] = array('admin');
  

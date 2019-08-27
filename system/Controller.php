@@ -17,14 +17,16 @@ class Controller
 		$this->input = new Parser(); 		
     }
     
-	function init($controller, $action) 
+	function init($area, $controller, $action) 
 	{
 		$this->_name = $controller;
 		$this->_action = $action; 
 		
 		if (!$this->view) 
 		{
-			$this->view = new View($this->_name, $this->_action);		
+			$this->view = new View($this->_name, $this->_action);
+						
+			$this->view->set_root($area);
 		}
 	}
 
@@ -42,5 +44,9 @@ class Controller
 	
 	function Title($str) {
 		$this->view->title($str);
+	}
+	
+	function Template($file) {
+		$this->view->set_layout($file);
 	}
 }
