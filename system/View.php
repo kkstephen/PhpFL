@@ -1,12 +1,9 @@
 <?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 /**
- * 视图基类
+ * View Base class
  */
 class View
 { 
-	protected $_controller;
-    protected $_action;
-    
 	var $_data = array();
 	var $_header = array();
 	
@@ -16,16 +13,12 @@ class View
 	var $tpl_header;
 	var $tpl_footer;
 	
-    function __construct($controller, $action)
-    {
-        $this->_controller = strtolower($controller);
-        $this->_action = strtolower($action);
-		
+    function __construct()
+    { 
 		$this->tpl_header = "header.php";
 		$this->tpl_footer = "footer.php";
 		
-		$this->template = "layout";
-		
+		$this->template = "layout";		
 	    $this->_root = "";
     }
 	
@@ -35,15 +28,15 @@ class View
 		$this->_header["header_title"] = $str;	
 	}
 	
-	function set_layout($file) 
+	function set_layout($file)
 	{
-		$this->template = $file;
+		$this->template .= '/'.$file;
 	}
 
-	function set_root($path) 
+	function set_root($path)
 	{		
 		if ($path != "") {
-			$this->_root = "area/".$path."/";
+			$this->_root = "area/".$path.'/';
 		}
 	}	
  
@@ -57,12 +50,8 @@ class View
     function render($file_view)
     {
 		$tmpl = APP_PATH.'app/'. $this->_root. 'views/';
-		 
-		if ($file_view == "") {
-			$file_view = $this->_action;
-		}
-
-		$body = $tmpl.$this->_controller.'/'.$file_view . '.php';
+		 	 
+		$body = $tmpl. $file_view . '.php';
 		
         if (file_exists($body)) {
 			//header
@@ -73,7 +62,7 @@ class View
 			//footer
 			echo $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$this->tpl_footer, null);
         } else {
-            exit("Not found view file.");
+            exit("Not found view file.".$body);
         }
     }
 	

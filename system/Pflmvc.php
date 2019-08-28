@@ -2,7 +2,7 @@
 
 /**
  * PHP MVC Core
- * written by Stephen Yeung. (2019-2)
+ * written by Stephen Yeung. (2019-8)
  */
  
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
@@ -83,7 +83,7 @@ class Pflmvc
 			require $controller; 
 		}
 		else {			 
-			exit('controller not found: '. $controller);
+			exit('page not found');
 		}
 		
 		// class name
@@ -96,7 +96,7 @@ class Pflmvc
 			$instance->init($area, $controllerName, $actionName);
 			$instance->$actionName($param);
 		} else {
-			exit('action not found');
+			exit('page not found');
 		}
 	}
 

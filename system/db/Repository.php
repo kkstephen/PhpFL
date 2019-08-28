@@ -1,19 +1,20 @@
 <?php 
 
-abstract class Repository {
+class Repository {
 	protected $db;
-	protected $model;	 
-	protected $table; 	 
+	protected $model; 
 	
-	function __construct($db) {
+	function __construct($db, $model) {
         $this->db = $db;
-    }  
+		$this->model = $model;
+    } 
 	
-	abstract public function create();
+	private function getTable() {		
+		return get_class($this->model);
+	}
 	
-	function Get($id)
-	{
-		$sql = "SELECT * FROM ".$this->table." where id = ?;";
+	function Get($id) {
+		$sql = "SELECT * FROM ".$this->getTable()." where id = ?;";
 		
 		$rows = $this->db->query($sql, $id);
 	 
@@ -25,13 +26,13 @@ abstract class Repository {
 	function Gets($page, $size) {		
 		$offset = ($page - 1) * $size;
 		
-		$sql = "SELECT * FROM ".$this->table." where id > 0 order by id desc limit ?, ?";
+		$sql = "SELECT * FROM ".$this->getTable()." where id > 0 order by id desc limit ?, ?";
 		$rows = $this->db->querys($sql, array($offset, $size));
 		
 		return $this->getdata($rows);	
 	}
 	
-	private function getdata($rows) {
+	private function getdata($rows)	{
 		$list = array();
 	 
 		$reflect = new ReflectionClass($this->model);
@@ -61,9 +62,8 @@ abstract class Repository {
 		return $list;	 
 	}
 	
-	function ToList()
-	{
-		$sql = "SELECT * FROM ".$this->table." where id > ? order by id asc;";
+	function ToList() {
+		$sql = "SELECT * FROM ".$this->getTable()." where id > ? order by id asc;";
 		$rows = $this->db->querys($sql, array(0));
 	          
 		return $this->getdata($rows);	 
@@ -84,26 +84,25 @@ abstract class Repository {
 			$i++;
 		}
 
-		$id = $this->db->insert($this->table, $cols, $values);
+		$id = $this->db->insert($this->getTable(), $cols, $values);
  
         return $id;
     }	
 	
-	function Drop()
-	{		
-		$sql = "drop table ".$this->table; 	
+	function Drop()	{	
+		$sql = "drop table ".$this->getTable(); 	
 		
 		$this->db->execute($sql); 
 	}
 	
-	function Remove($id) {		
-		$sql = 'delete from '.$this->table.' WHERE id = ?;';		
+	function Remove($id) {
+		$sql = 'delete from '.$this->getTable().' WHERE id = ?;';		
 		
 		return $this->db->delete($sql, $id);
 	}
 	
 	function Clear() {
-		$sql = 'delete from '.$this->table.';';
+		$sql = 'delete from '.$this->getTable().';';
 		
 		return $this->db->execute($sql);
 	}

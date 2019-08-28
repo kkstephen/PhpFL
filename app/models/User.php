@@ -1,8 +1,6 @@
 <?php 
 
 class User {	
-	// property declaration
-	// property declaration
     public $name;
     public $email;
  	public $company; 
