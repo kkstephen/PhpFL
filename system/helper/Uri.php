@@ -35,7 +35,7 @@ class Uri {
 	{    
 		$pos = strpos($url, '?');
 		
-        $this->uri_string = $pos === false ? $url : substr($url, 0, $position);
+        $this->uri_string = $pos === false ? $url : substr($url, 0, $pos);
 	
 		$this->segments = explode('/', $this->uri_string);
 		
