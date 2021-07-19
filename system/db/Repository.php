@@ -2,15 +2,17 @@
 
 class Repository {
 	protected $db;
-	protected $model; 
+	protected $reflects; 
 	
-	function __construct($db, $model) {
-        $this->db = $db;
-		$this->model = $model;
+	function __construct($conn, $modelName) {
+        $this->db = $conn;		
+		
+		$model = Pflmvc::loadModel($modelName);
+		$this->reflects = new ReflectionClass($model);			
     } 
-	
-	private function getTable() {		
-		return get_class($this->model);
+	 
+	function getTable() {		
+		return $this->reflects->getName();
 	}
 	
 	function Get($id) {
@@ -21,7 +23,7 @@ class Repository {
 		$user = $this->getdata($rows);	 
 		
 		return $user[0];		
-	}	
+	}
 	
 	function Gets($page, $size) {		
 		$offset = ($page - 1) * $size;
@@ -35,8 +37,8 @@ class Repository {
 	private function getdata($rows)	{
 		$list = array();
 	 
-		$reflect = new ReflectionClass($this->model);
-		$props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+		//$reflect = new ReflectionClass($this->model);
+		$props = $this->reflects->getProperties(ReflectionProperty::IS_PUBLIC);
 				
 		$cols = array();
 		$i = 0;
@@ -70,8 +72,8 @@ class Repository {
 	}
 	
 	function Add($model) {
-		$reflect = new ReflectionClass($model);
-		$props = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
+		//$reflect = new ReflectionClass($model);
+		$props = $this->reflects->getProperties(ReflectionProperty::IS_PUBLIC);
 
 		$i = 0;
 		$cols = array();
@@ -89,12 +91,12 @@ class Repository {
         return $id;
     }	
 	
-	function Drop()	{	
-		$sql = "drop table ".$this->getTable(); 	
+	function Update($id, $prop, $val) {
+		$sql = "Update ".$this->getTable().' set '. $prop . ' = "' . $val . '" where id = ' .$id;	
 		
-		$this->db->execute($sql); 
+		return $this->db->execute($sql);
 	}
-	
+	 
 	function Remove($id) {
 		$sql = 'delete from '.$this->getTable().' WHERE id = ?;';		
 		

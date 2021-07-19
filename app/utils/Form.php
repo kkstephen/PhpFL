@@ -41,4 +41,5 @@ function form_radio_group($name, $input, $list, $attr = "") {
 		$i++;
 	} 
 }
+
  

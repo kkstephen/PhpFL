@@ -18,13 +18,13 @@ class Controller
 		$this->view = new View();
     }
     
-	function init($area, $controller, $action)
+	function init($area, $name, $action)
 	{
-		$this->_name = $controller;
+		$this->_name = $name;
 		$this->_action = $action;  
 		
 		$this->view->set_root($area);	
-	}
+	} 
 
 	// set view data
     function ViewData($name, $value)
@@ -54,5 +54,14 @@ class Controller
 	function Template($file)
 	{
 		$this->view->set_layout($file);
+	}
+
+	function Redirect($controller, $action, $permanent = false) 
+	{
+		$url = url_action($controller, $action);
+	 
+	    header('Location: ' . $url, true, $permanent ? 301 : 302);
+
+        exit();
 	}
 }

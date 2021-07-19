@@ -52,13 +52,13 @@ sub, sup {
 .jp-container {
 	width: 970px;
 	box-sizing: border-box;
-	padding: 3px;
+	padding: 0 5px;
 	margin: 0 auto;
 	color: #444444;
 }
 
 .jp-form-input div {
-	padding: 5px;
+	padding: 3px 0;
 	box-sizing: border-box;
 }
  
@@ -84,7 +84,7 @@ sub, sup {
 }
 
 .jp-text {
-	font-size: 14px;
+	font-size: 16px;
 	color: #808080;
 }
 

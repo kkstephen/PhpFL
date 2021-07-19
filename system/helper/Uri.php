@@ -57,8 +57,11 @@ class Uri {
 	}
 	
 	function get_area() {
-		if (is_special($this->segments[0])) {
-			return $this->segments[0];
+		$area = Pflmvc::$Config['area'];
+		$r = $this->segments[0];
+		
+		if (in_array($r, $area)) {
+			return $r;
 		}
 		
 		return "";

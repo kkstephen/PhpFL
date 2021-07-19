@@ -26,19 +26,3 @@ function url_action($controller, $act, $id = "") {
  
 	return base_url()."/".$controller."/".$act.'/'.$id;
 }
-
-function redirect($url, $permanent = false)
-{
-    header('Location: ' . $url, true, $permanent ? 301 : 302);
-
-    exit();
-}
-
-function routeTo($controller, $act, $permanent = false)
-{ 
-	$url = url_action($controller, $act);
-	 
-	redirect($url, $permanent);   
-}
-
-	

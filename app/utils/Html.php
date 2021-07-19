@@ -12,6 +12,10 @@ function html_img($file) {
 	echo html_asset('images/'.$file);
 }
 
+function html_file($file) {
+	echo html_asset('files/'.$file);
+}
+
 function html_asset($path) {
 	echo CONTENT.$path;
 }

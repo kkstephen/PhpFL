@@ -25,7 +25,7 @@ class View
 	//title 
 	function title($str) 
 	{
-		$this->_header["header_title"] = $str;	
+		$this->_header["template_title"] = $str;	
 	}
 	
 	function set_layout($file)

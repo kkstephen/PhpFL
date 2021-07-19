@@ -2,6 +2,8 @@
 
 define('CONTENT', '/assets/');
 
+$config['debug'] = false;
+
 // database
 $config['db']['host'] = 'sqlite:'.APP_PATH.'data/event.db3';
 $config['db']['username'] = '';
@@ -16,7 +18,7 @@ $config['default_controller'] = 'Home';
 $config['language']	= array('default' => 'english', 'i18n' => array("zh-hk" => "chinese", "en-us" => "english")); 
 
 // tools
-$config['utils'] = array("Html", "Form", "Route", "Session", "PdoUnit");
+$config['utils'] = array("Html", "Form", "Route", "PdoUnit", "Session");
 
 // route
 $config['area'] = array('admin');

@@ -2,7 +2,7 @@
 
 /**
  * PHP MVC Core
- * written by Stephen Yeung. (2019-8)
+ * written by Stephen Yeung. (2019-2)
  */
  
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
@@ -14,11 +14,15 @@ $url_segments;
 class Pflmvc
 { 
     public static $Config;
+	
 	private $_uri; 
+	private $is_debug;
 	
     function __construct($config)
     {
 		self::$Config = $config;
+		
+		$this->is_debug = $config['debug'];
     }
  
     function run()
@@ -40,12 +44,13 @@ class Pflmvc
         $actionName = "index";
         $param = array();
 		
-		// get request uri string: area/controller/action/id
+		// get request uri string: 
 		$url_segments = $this->_uri->get_segments($_SERVER['REQUEST_URI']);
 	 
 		$i = 0;
 		$appPath = APP_PATH.'app/';
 	
+		// {area}/controller/action/id
 		$area = $this->_uri->get_area();
 
 		if (!isNULLorEmpty($area)) {
@@ -54,40 +59,44 @@ class Pflmvc
 			$appPath .= "area/".$area."/";
 		}			
 
-		// get lang code: lang/controller/action/id
+		// {lang}/controller/action/id
+		// get lang code: 
 		if ($this->_uri->has_language()) {
 			$i++;
 		}
 		
-		// get controller name
+		// get controller
 		if (!isNULLorEmpty($url_segments[$i])) {  
 			$controllerName = ucfirst($url_segments[$i]);
 		}
 		
 		$i++;
-		// get action name
+		// get action
 		if (!isNULLorEmpty($url_segments[$i])) {  
 			$actionName = $url_segments[$i];
 		}
 		
 		$i++;
-		// get action id  
+		// get id  
 		if (!isNULLorEmpty($url_segments[$i])) {
-			$param = $url_segments[$i];
+			$param = $url_segments[$i]; 
 		}
 
         // class file
-        $controller = $appPath.'controllers/'.$controllerName.'.php';
+        $controller = $appPath.'controllers/'.$controllerName.'Controller.php';
 			
 		if (file_exists($controller)) { 
 			require $controller; 
 		}
 		else {			 
-			exit('page not found');
+			if ($this->is_debug) { 
+				$log = "trace on : ".$controller;
+			}
+			exit('controller not found. '.$log);
 		}
 		
 		// class name
-		$className = $controllerName.'Controller';
+		$className = $controllerName."Controller";
 		 
 		// create class instance
 		if (method_exists($className, $actionName)) {
@@ -96,7 +105,11 @@ class Pflmvc
 			$instance->init($area, $controllerName, $actionName);
 			$instance->$actionName($param);
 		} else {
-			exit('page not found');
+			if ($this->is_debug) { 
+				$log = "trace on : ".$className.'/'.$actionName;
+			}
+			
+			exit('page not found: '.$log);
 		}
 	}
 
@@ -145,6 +158,17 @@ class Pflmvc
             }
         }
     }	
+
+	public static function loadModel($className) 
+	{ 
+		$m = APP_PATH.'app/models/'.$className.'.php';
+		
+		if (file_exists($m)) { 
+			require_once $m; 
+		}
+		
+		return new $className();
+	}
 
     // load class 
     private function loadClass()

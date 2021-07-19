@@ -1,6 +1,6 @@
 <?php if ( ! defined('APP_PATH')) exit('No direct script access allowed');
 
-class HomeController extends Controller 
+class Home extends Controller 
 { 	
     private	$db;
 	
