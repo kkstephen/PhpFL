@@ -6,11 +6,11 @@ class Database {
      * @var type 
      */
     protected $pdo;
-	var $conn;
+	private $conn;
  
     function __construct($connStr)
-    {
-        $this->conn = $connStr;
+    { 
+		$this->conn = $connStr;
     }
 	
     /**
@@ -20,14 +20,14 @@ class Database {
     function open() {
 		
 		if ($this->pdo == null) {
-			$this->pdo = new PDO($this->conn["host"]);
+			$this->pdo = new PDO($this->conn['host'],$this->conn['user'], $this->conn['password']);
 			$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
 	}
 	
 	function close() {
 		$this->pdo = null;
-	}
+	} 
 	
 	function query($sql, $key) {
 		$stmt = $this->pdo->prepare($sql);		
@@ -74,6 +74,14 @@ class Database {
 		$stmt = null;
 		
 		return $i;
+	} 
+	
+	function count($table) {		
+		$sql = "SELECT COUNT(id) as rows FROM ".$table;
+		
+		$res = $this->pdo->query($sql);
+		
+		return $res->fetchColumn();
 	}
 	
 	function execute($sql) {

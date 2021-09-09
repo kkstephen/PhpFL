@@ -15,6 +15,11 @@ class Repository {
 		return $this->reflects->getName();
 	}
 	
+	function Create($sql) {
+		
+		return $this->db->execute($sql);
+	}
+		
 	function Get($id) {
 		$sql = "SELECT * FROM ".$this->getTable()." where id = ?;";
 		
@@ -109,7 +114,7 @@ class Repository {
 		return $this->db->execute($sql);
 	}
 	
-	function Count() {		
-		return $this->db->count($this->table);		 
+	function Count() {
+		return $this->db->count($this->getTable());		 
 	}
 }

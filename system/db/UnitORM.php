@@ -1,20 +1,17 @@
 <?php 
 
 class UnitORM {
-	public $connStr;
+	 
  	protected $db;
 	
-	function __construct() 
-	{
-		$this->connStr = Pflmvc::$Config['db'];
-		$this->db = new Database($this->connStr);
+	function __construct($dsn) 
+	{  
+		$this->db = new Database($dsn);
     } 
 	
 	function open()
-	{
-		if ($this->db != null) {			
-			$this->db->open(); 
-		}
+	{  
+		$this->db->open(); 
 	}
 	
 	function close() 

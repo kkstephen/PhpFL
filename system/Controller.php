@@ -64,4 +64,14 @@ class Controller
 
         exit();
 	}
+	
+	function Getlib($folder, $list) 
+	{
+		$path = APP_PATH.'app/utils/';
+		
+		foreach ($list as $name)
+		{
+			require_once $path.$folder.'/'.$name.'.php';			 
+		}
+	}
 }
