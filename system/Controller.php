@@ -32,6 +32,12 @@ class Controller
         $this->view->assign($name, $value);
     }
 
+	function Parts($name, $path) {
+		$val = $this->view->find($path, null);
+		
+		$this->view->assign($name, $val);
+	}
+
     // render HTML
     function Render($file = "")
 	{

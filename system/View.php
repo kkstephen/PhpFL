@@ -55,17 +55,21 @@ class View
 		
         if (file_exists($body)) {
 			//header
-			echo $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$this->tpl_header, $this->_header);				
+			echo $this->find($this->tpl_header, $this->_header);				
 			
 			echo $this->parse($body, $this->_data);	
 			
 			//footer
-			echo $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$this->tpl_footer, null);
+			echo $this->find($this->tpl_footer, null);
         } else {
             exit("Not found view file.".$body);
         }
     }
-	
+	 
+	function find($view, $data) {
+		return $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$view, $data);
+	}
+	 
 	private function parse($filename, $data)
 	{  
 		//fetch object variable
