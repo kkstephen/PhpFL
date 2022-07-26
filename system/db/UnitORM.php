@@ -18,5 +18,5 @@ class UnitORM {
 	{
 		if ($this->db != null)
 			$this->db->close();
-	}
+	}  
 }

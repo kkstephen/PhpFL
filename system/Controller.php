@@ -29,27 +29,27 @@ class Controller
 	// set view data
     function ViewData($name, $value)
 	{ 
-        $this->view->assign($name, $value);
+        $this->view->set_data($name, $value);
     }
+	
+	function PartialVars($name, $list) {
+		$this->view->set_vars($name, $list);
+	}
 
 	function Parts($name, $path) {
-		$val = $this->view->find($path, null);
-		
-		$this->view->assign($name, $val);
+		$this->view->set_parts($name, $path); 
 	}
 
     // render HTML
     function Render($file = "")
 	{
-		$path = strtolower($this->_name). '/';
+		$path = strtolower($this->_name);
 		
 		if ($file == "") {
-			$path .= strtolower($this->_action);
-		} else {
-			$path .= $file;
-		}
+			$file = strtolower($this->_action);
+		}  	 
 		
-        $this->view->render($path);
+        $this->view->render($path, $file);
     }
 	
 	function Title($str)
@@ -75,9 +75,11 @@ class Controller
 	{
 		$path = APP_PATH.'app/utils/';
 		
+		$fp = $folder."/";
+		
 		foreach ($list as $name)
 		{
-			require_once $path.$folder.'/'.$name.'.php';			 
+			require_once $path.$fp.$name.'.php';			 
 		}
 	}
 }

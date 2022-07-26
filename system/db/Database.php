@@ -29,22 +29,17 @@ class Database {
 		$this->pdo = null;
 	} 
 	
-	function query($sql, $key) {
-		$stmt = $this->pdo->prepare($sql);		
-		$stmt->execute(array($key));
-
-		$row = $stmt->fetch();	 
+	function select($table, $cols, $cond, $params) {
+		$sql = "SELECT ".$cols." FROM ".$table." where ".$cond.";";
 		
-		$stmt = null;
-		
-		return $row;		
-	}
+		return $this->querys($sql, $params);
+	} 
 	
 	function querys($sql, $params) {
 		$stmt = $this->pdo->prepare($sql);
 		
 		$stmt->execute($params);		
-		$rows = $stmt->fetchAll(); 
+		$rows = $stmt->fetchAll(PDO::FETCH_CLASS, 'stdClass'); 
 		
 		$stmt = null;
 		
@@ -61,20 +56,20 @@ class Database {
      
 		$stmt = null;
 		
-		$this->pdo->lastInsertId();		
+		return $this->pdo->lastInsertId();		
 	}
 	
-	function delete($sql, $key) {		
-		$stmt = $this->pdo->prepare($sql);		
-		
-		$stmt->execute(array($key));		
-		
-		$i = $stmt->rowCount();
-		
-		$stmt = null;
-		
-		return $i;
+	function update($table, $cols, $cond, $values) { 
+		$sql = "Update ".$table.' set '.implode(", ", $cols).' where '.$cond.';';	
+	  
+		return $this->execute($sql, $values);
 	} 
+	
+	function delete($table, $cond, $values) {
+		$sql = 'delete from '.$table.' WHERE '.$cond.';';	
+		
+		return $this->execute($sql, $values);
+	}
 	
 	function count($table) {		
 		$sql = "SELECT COUNT(id) as rows FROM ".$table;
@@ -84,8 +79,17 @@ class Database {
 		return $res->fetchColumn();
 	}
 	
-	function execute($sql) {
-		$this->pdo->exec($sql);		 
+	function execute($sql, $params) {
+	 
+		$stmt = $this->pdo->prepare($sql);		
+		
+		$stmt->execute($params);		
+		
+		$i = $stmt->rowCount();
+		
+		$stmt = null;
+		
+		return $i; 
 	}
 }
  

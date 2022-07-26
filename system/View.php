@@ -4,80 +4,105 @@
  */
 class View
 { 
-	var $_data = array();
-	var $_header = array();
+	var $_data = array(); 
 	
-	var $_root;
+	var $_partial = array();
+	var $_body = array();
 	
-	var $template;
-	var $tpl_header;
-	var $tpl_footer;
+	var $_root;	
+	var $_folder;
+	var $template;  
+	
+	var $is_gzip = false;
 	
     function __construct()
-    { 
-		$this->tpl_header = "header.php";
-		$this->tpl_footer = "footer.php";
-		
-		$this->template = "layout";		
+    {  
+		$this->template = "layout";
 	    $this->_root = "";
     }
 	
 	//title 
 	function title($str) 
 	{
-		$this->_header["template_title"] = $str;	
+		$this->_data["header"]["template_title"] = $str;	
+	}
+	
+	function meta($str) {
+		$this->_data["header"]["meta_desc"] = $str;	
 	}
 	
 	function set_layout($file)
 	{
 		$this->template .= '/'.$file;
 	}
-
+	
+    function get_tpl() {
+		return APP_PATH.'app/views/'.$this->template;
+	}
+	
 	function set_root($path)
 	{		
 		if ($path != "") {
 			$this->_root = "area/".$path.'/';
 		}
 	}	
+	
+	function set_parts($name, $file) 
+	{
+		$this->_partial["tpl"][$name] = $file; 
+	}
  
-    // save variable
-    function assign($name, $value)
+	function set_vars($name, $datas) 
+	{
+		$this->_partial["vars"][$name] = $datas; 
+	}
+	
+    // set variable
+    function set_data($name, $value)
     {
-        $this->_data[$name] = $value;
+        $this->_data["body"][$name] = $value;
     }
-     
+      
     // output HMTL
-    function render($file_view)
+    function render($folder, $file_view)
     {
 		$tmpl = APP_PATH.'app/'. $this->_root. 'views/';
 		 	 
-		$body = $tmpl. $file_view . '.php';
+		$body = $tmpl. $folder . "/". $file_view . '.php';
 		
-        if (file_exists($body)) {
-			//header
-			echo $this->find($this->tpl_header, $this->_header);				
-			
-			echo $this->parse($body, $this->_data);	
-			
-			//footer
-			echo $this->find($this->tpl_footer, null);
-        } else {
-            exit("Not found view file.".$body);
-        }
-    }
-	 
-	function find($view, $data) {
-		return $this->parse($APP_PATH.'app/views/'.$this->template.'/'.$view, $data);
-	}
-	 
-	private function parse($filename, $data)
-	{  
-		//fetch object variable
-		if (isset($data)) {
-			extract($data, EXTR_SKIP);		
+        if (!file_exists($body)) { 
+			$body = $this->get_tpl(). "/" . $file_view . '.php';
 		}
 		
-		ob_start(); 
+		if (file_exists($body)) { 
+		
+			//header
+			echo $this->parse($this->get_tpl()."/header.php", $this->_data["header"]); 
+			
+			foreach ($this->_partial["tpl"] as $name => $tpl) {
+				$html = $this->parse($this->get_tpl()."/".$tpl, $this->_partial["vars"][$name]);  
+				
+				$this->set_data($name, $html); 
+			}
+						
+			echo $this->parse($body, $this->_data['body']); 
+			
+			//footer 
+			echo $this->parse($this->get_tpl()."/footer.php", null); 
+			
+        } else {
+            exit($this->parse($tmpl.'layout/'.'error.php', null));
+        }
+    }
+ 
+	private function parse($filename, $data)
+	{   
+		ob_start();  
+		
+		//fetch object variable
+		if (isset($data)) {				 
+			extract($data, EXTR_SKIP);		
+		}
 		
 		include $filename;
 		
@@ -86,5 +111,5 @@ class View
 		ob_end_clean();
 		
 		return $content;
-	}
+	}  
 }

@@ -7,4 +7,4 @@ function isNULLorEmpty($str)
 
 function startWith($str, $query) {
 	return substr($str, 0, strlen($query)) === $query;
-}
+} 

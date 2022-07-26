@@ -27,7 +27,7 @@ class Pflmvc
  
     function run()
     { 
-        $this->removeMagicQuotes();
+        //$this->removeMagicQuotes();
         $this->unregisterGlobals();
 		$this->loadClass(); 
         $this->setRoute();
@@ -66,19 +66,19 @@ class Pflmvc
 		}
 		
 		// get controller
-		if (!isNULLorEmpty($url_segments[$i])) {  
+		if ($this->has_segment($i)) {  
 			$controllerName = ucfirst($url_segments[$i]);
 		}
 		
 		$i++;
 		// get action
-		if (!isNULLorEmpty($url_segments[$i])) {  
+		if ($this->has_segment($i)) {  
 			$actionName = $url_segments[$i];
 		}
 		
 		$i++;
 		// get id  
-		if (!isNULLorEmpty($url_segments[$i])) {
+		if ($this->has_segment($i)) { 
 			$param = $url_segments[$i]; 
 		}
 
@@ -92,7 +92,8 @@ class Pflmvc
 			if ($this->is_debug) { 
 				$log = "trace on : ".$controller;
 			}
-			exit('controller not found. '.$log);
+		 
+			exit($this->out_error());
 		}
 		
 		// class name
@@ -109,7 +110,7 @@ class Pflmvc
 				$log = "trace on : ".$className.'/'.$actionName;
 			}
 			
-			exit('page not found: '.$log);
+			exit($this->out_error());
 		}
 	}
 
@@ -158,6 +159,12 @@ class Pflmvc
             }
         }
     }	
+	
+	private function has_segment($i) {
+		global $url_segments;
+		
+		return count($url_segments) > $i && !isNULLorEmpty($url_segments[$i]);
+	}
 
 	public static function loadModel($className) 
 	{ 
@@ -199,7 +206,7 @@ class Pflmvc
 		}
     }
 	
-	private function error_notfound()
+	private function out_error()
 	{
 		$tmpl = APP_PATH . 'app/views/layout/notfound.php';
 		

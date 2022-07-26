@@ -4,10 +4,9 @@ class Repository {
 	protected $db;
 	protected $reflects; 
 	
-	function __construct($conn, $modelName) {
+	function __construct($conn, $model) {
         $this->db = $conn;		
-		
-		$model = Pflmvc::loadModel($modelName);
+ 
 		$this->reflects = new ReflectionClass($model);			
     } 
 	 
@@ -15,75 +14,59 @@ class Repository {
 		return $this->reflects->getName();
 	}
 	
+	function getProps() {
+		return $this->reflects->getProperties(ReflectionProperty::IS_PUBLIC);
+	}
+	
 	function Create($sql) {
 		
 		return $this->db->execute($sql);
 	}
 		
-	function Get($id) {
-		$sql = "SELECT * FROM ".$this->getTable()." where id = ?;";
+	function Get($id) {	 
+		$list = $this->Gets("id = ?", array($id));	 
 		
-		$rows = $this->db->query($sql, $id);
-	 
-		$user = $this->getdata($rows);	 
-		
-		return $user[0];		
+		return $list[0];		
 	}
 	
-	function Gets($page, $size) {		
-		$offset = ($page - 1) * $size;
+	function Gets($cond, $params) { 
+		$rows = $this->db->select($this->getTable(), "*", $cond, $params);
 		
-		$sql = "SELECT * FROM ".$this->getTable()." where id > 0 order by id desc limit ?, ?";
-		$rows = $this->db->querys($sql, array($offset, $size));
+		return $this->getdata($rows);
+	}
+	
+	function GetPage($page, $size) {		
+		$offset = ($page - 1) * $size; 
 		
-		return $this->getdata($rows);	
+		return $this->Gets("id > 0 order by id desc limit ?, ?", array($offset, $size));	
 	}
 	
 	private function getdata($rows)	{
-		$list = array();
-	 
-		//$reflect = new ReflectionClass($this->model);
-		$props = $this->reflects->getProperties(ReflectionProperty::IS_PUBLIC);
-				
-		$cols = array();
+		$list = array(); 
 		$i = 0;
 		
-		foreach ($props as $prop) {
-			$cols[$i++] = $prop->getName(); 
-		} 
-		
 		foreach ($rows as $row)
-		{
-			$user = array();			
+		{  
+			$list[$i] = (object)$row;
 			
-			foreach( $cols as $key => $val)
-			{						
-				$user[$val] =  $row[$val];				 
-			}
-			
-			$user["id"] = $row['id'];	 
-			
-			array_push($list, $user);
+			$i++;
 		}  
 		
 		return $list;	 
 	}
 	
-	function ToList() {
-		$sql = "SELECT * FROM ".$this->getTable()." where id > ? order by id asc;";
-		$rows = $this->db->querys($sql, array(0));
-	          
-		return $this->getdata($rows);	 
+	function ToList() { 
+		return $this->Gets("id > ? order by id asc", array(0)); 
 	}
 	
 	function Add($model) {
-		//$reflect = new ReflectionClass($model);
-		$props = $this->reflects->getProperties(ReflectionProperty::IS_PUBLIC);
-
+		 
 		$i = 0;
 		$cols = array();
 		$values = array();
-
+          
+		$props = $this->getProps();
+		  
 		foreach ($props as $prop) {
 			$cols[$i] = $prop->getName();
 			$values[$i] = $prop->getValue($model);
@@ -91,30 +74,50 @@ class Repository {
 			$i++;
 		}
 
-		$id = $this->db->insert($this->getTable(), $cols, $values);
- 
-        return $id;
+		return $this->db->insert($this->getTable(), $cols, $values); 
     }	
 	
-	function Update($id, $prop, $val) {
-		$sql = "Update ".$this->getTable().' set '. $prop . ' = "' . $val . '" where id = ' .$id;	
+	function Modify($cols, $values) {
+		 
+		return $this->db->update($this->getTable(), $cols, "id = ?", $values);
+	}
+	
+	function Update($model) {
+	  
+	    if (is_null($model) || $model->id == "") {
+			return false;
+		}
 		
-		return $this->db->execute($sql);
+		$i = 0;
+		$cols = array();
+		$values = array();
+		
+		$props = $this->getProps();
+		
+		foreach ($props as $prop) {
+			$name = $prop->getName();
+			
+			$cols[$i] = $name. ' = ?';
+			$values[$i] = $model->$name; // not an instance of the class 
+			
+			$i++;
+		} 
+		
+		$values[$i] = $model->id;
+		
+		return $this->Modify($cols, $values);
 	}
 	 
-	function Remove($id) {
-		$sql = 'delete from '.$this->getTable().' WHERE id = ?;';		
-		
-		return $this->db->delete($sql, $id);
+	function Remove($id) { 
+		return $this->Clear(" id = ? ", array($id));
 	}
 	
-	function Clear() {
-		$sql = 'delete from '.$this->getTable().';';
-		
-		return $this->db->execute($sql);
+	function Clear($cond, $keys) {
+	 
+		return $this->db->delete($this->getTable(), $cond, $keys);
 	}
 	
-	function Count() {
+	function Count() {		
 		return $this->db->count($this->getTable());		 
 	}
 }
