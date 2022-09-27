@@ -7,7 +7,7 @@
  
 defined('CORE_PATH') or define('CORE_PATH', __DIR__);
 
-const PFL_VERSION = '1.01';
+const PFL_VERSION = '1.02';
 
 $url_segments;
 
@@ -29,8 +29,9 @@ class Pflmvc
     { 
         //$this->removeMagicQuotes();
         $this->unregisterGlobals();
-		$this->loadClass(); 
-        $this->setRoute();
+		$this->loadClass();  
+		
+        $this->setRoute(); 
     }
 	
     // Route
@@ -57,8 +58,13 @@ class Pflmvc
 			$i++;
 			
 			$appPath .= "area/".$area."/";
-		}			
-
+		} else {
+			//check maintainence	
+			if (self::$Config["maintain"]) {			
+				exit($this->out_error("maintain"));
+			}		
+		} 
+		
 		// {lang}/controller/action/id
 		// get lang code: 
 		if ($this->_uri->has_language()) {
@@ -93,7 +99,7 @@ class Pflmvc
 				$log = "trace on : ".$controller;
 			}
 		 
-			exit($this->out_error());
+			exit($this->out_error("notfound"));
 		}
 		
 		// class name
@@ -110,7 +116,7 @@ class Pflmvc
 				$log = "trace on : ".$className.'/'.$actionName;
 			}
 			
-			exit($this->out_error());
+			exit($this->out_error("notfound"));
 		}
 	}
 
@@ -206,9 +212,9 @@ class Pflmvc
 		}
     }
 	
-	private function out_error()
+	private function out_error($file)
 	{
-		$tmpl = APP_PATH . 'app/views/layout/notfound.php';
+		$tmpl = APP_PATH . 'app/views/layout/'.$file.'.php';
 		
 		ob_start(); 
 		
